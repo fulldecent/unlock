@@ -1,6 +1,7 @@
 FROM node:8.11.4
 LABEL Unlock <ops@unlock-protocol.com>
 RUN npm install -g npm@6.4.1
+RUN npm set progress=false # Making npn less verbose
 
 RUN mkdir /home/unlock
 RUN mkdir /home/unlock/scripts
@@ -8,6 +9,7 @@ RUN chown -R node /home/unlock
 WORKDIR /home/unlock
 
 USER node
+
 
 # To leverage the docker caching it is better to install the deps
 # before the file changes. This will allow docker to not install

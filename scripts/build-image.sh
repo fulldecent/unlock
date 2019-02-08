@@ -10,9 +10,16 @@ DOCKERFILE=$REPO_ROOT/docker/$IMAGE_NAME.dockerfile
 ARGS=""
 
 if [ "$DOCKER_REPOSITORY" != "" ]; then
+  # if we have a repo, let's pull the image from there
   IMAGE_CACHE="$DOCKER_REPOSITORY/$IMAGE_NAME:latest"
-  echo "Pulling $IMAGE_CACHE to use as cache for $IMAGE_NAME"
   docker pull $IMAGE_CACHE;
+elif [ -f ${CACHE_DIR} ]; then
+  # If we have a cache, let's try to load the image from there
+  CACHE_FILE="${CACHE_DIR}/$IMAGE_NAME.tar.gz"
+  if [ -f ${CACHE_FILE} ]; then
+    gunzip -c ${CACHE_FILE} | docker load
+  fi
+  IMAGE_CACHE="$IMAGE_NAME:latest"
 else
   IMAGE_CACHE="$IMAGE_NAME:latest"
 fi
