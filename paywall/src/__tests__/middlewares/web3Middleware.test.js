@@ -280,7 +280,7 @@ describe('Lock middleware', () => {
 
   describe('not on the paywall', () => {
     it('should handle SET_ACCOUNT by refreshing balance and retrieving historical unlock transactions', () => {
-      expect.assertions(3)
+      expect.assertions(2)
       mockWeb3Service.refreshAccountBalance = jest.fn()
       mockWeb3Service.getPastLockCreationsTransactionsForUser = jest.fn()
       mockWeb3Service.getKeyByLockForOwner = jest.fn()
@@ -295,9 +295,6 @@ describe('Lock middleware', () => {
       expect(mockWeb3Service.refreshAccountBalance).toHaveBeenCalledWith(
         newAccount
       )
-      expect(
-        mockWeb3Service.getPastLockCreationsTransactionsForUser
-      ).toHaveBeenCalledWith(newAccount.address)
       expect(mockWeb3Service.getKeyByLockForOwner).not.toHaveBeenCalled()
     })
   })
@@ -319,9 +316,6 @@ describe('Lock middleware', () => {
       invoke(setAccount(newAccount))
 
       expect(mockWeb3Service.refreshAccountBalance).toHaveBeenCalled()
-      expect(
-        mockWeb3Service.getPastLockCreationsTransactionsForUser
-      ).toHaveBeenCalled()
       expect(mockWeb3Service.getKeyByLockForOwner).toHaveBeenCalledWith(
         lock,
         '0x345'

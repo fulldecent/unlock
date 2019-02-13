@@ -1,25 +1,22 @@
 import Web3 from 'web3'
 import React, { useState, useEffect, createContext } from 'react'
 import PropTypes from 'prop-types'
-import { MISSING_PROVIDER, NOT_ENABLED_IN_PROVIDER } from '../../errors'
+import { NOT_ENABLED_IN_PROVIDER } from '../../errors'
 import useConfig from '../utils/useConfig'
 
 export const WalletContext = createContext()
 
 export function useCreateWallet() {
   const { providers } = useConfig()
-  if (!providers.length) {
-    throw new Error(MISSING_PROVIDER)
-  }
-  const provider = providers[0]
+  const provider = providers[Object.keys(providers)[0]]
   const [web3, setWeb3] = useState()
-  const [error, setError] = useState(false)
+  const [error, setError] = useState()
 
   const setup = () => {
     try {
       setWeb3(new Web3(provider))
     } catch (e) {
-      setError(new Error(MISSING_PROVIDER))
+      // if provider is missing, we simply don't create the wallet
     }
   }
   const prepare = async () => {
@@ -36,7 +33,7 @@ export function useCreateWallet() {
   }
   useEffect(
     () => {
-      if (!provider.enable) {
+      if (!provider || !provider.enable) {
         setup()
       } else {
         // we can't call async functions directly because they return a promise,
@@ -51,7 +48,6 @@ export function useCreateWallet() {
   )
 
   if (error) throw error
-
   return web3
 }
 

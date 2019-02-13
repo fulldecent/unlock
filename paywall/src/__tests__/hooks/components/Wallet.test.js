@@ -21,14 +21,6 @@ describe('Wallet component', () => {
       wrapper = wrapperMaker(config)
     })
 
-    it('throws if there are no providers', () => {
-      config.providers = []
-
-      expectError(() => {
-        rtl.testHook(() => useCreateWallet(), { wrapper })
-      }, MISSING_PROVIDER)
-    })
-
     it('throws if the provider enable fails', () => {
       config.providers = [
         {
@@ -41,18 +33,6 @@ describe('Wallet component', () => {
       expectError(() => {
         rtl.testHook(() => useCreateWallet(), { wrapper })
       }, NOT_ENABLED_IN_PROVIDER)
-    })
-
-    it('throws if Web3 throws in constructor', () => {
-      config.providers = ['hi']
-      MockWeb3.mockImplementationOnce(() => {
-        throw new Error('nope')
-      })
-      expectError(() => {
-        rtl.act(() => {
-          rtl.testHook(() => useCreateWallet(), { wrapper })
-        })
-      }, MISSING_PROVIDER)
     })
 
     it('returns a new Web3 object if success occurs', () => {

@@ -42,7 +42,6 @@ module.exports = withSourceMaps({
 
     return {
       '/': { page: '/' },
-      '/paywall': { page: '/paywall' },
     }
   },
 })
