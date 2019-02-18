@@ -12,6 +12,17 @@ REPO_ROOT=`dirname "$0"`/..
 DOCKER_COMPOSE_FILE=$REPO_ROOT/docker/docker-compose.ci.yml
 TRAVIS_ENV_VARS=`env | grep TRAVIS_ | awk '{print "-e ",$1}' ORS=' '`
 
+# Pull the image
+IMAGE_NAME="unlock"
+IMAGE_TAG="build-$TRAVIS_BUILD_ID"
+IMAGE_CACHE="$IMAGE_NAME:$IMAGE_TAG" # default
+if [ "$DOCKER_REPOSITORY" != "" ]; then
+  IMAGE_CACHE="$DOCKER_REPOSITORY/$IMAGE_NAME:$IMAGE_TAG"
+  echo "Pulling $IMAGE_CACHE to use as cache for $IMAGE_NAME"
+  docker pull $IMAGE_CACHE
+fi
+docker tag $IMAGE_CACHE $IMAGE_NAME
+
 # Identify the environment for the target (production or staging)
 if [ -n "$TRAVIS_TAG" ] &&
    [ -n "$TRAVIS_COMMIT" ] &&
