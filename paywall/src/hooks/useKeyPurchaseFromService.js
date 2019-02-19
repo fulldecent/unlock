@@ -1,7 +1,5 @@
 import { useState, useEffect, useReducer } from 'react'
 
-import useLock from './useLockFromService'
-import { lockRoute } from '../utils/routes'
 import useAccount from './web3/useAccountFromService'
 import useWeb3 from './web3/useWeb3Service'
 import useWallet from './web3/useWalletService'
@@ -49,9 +47,7 @@ export function handleTransactionUpdates(transaction, update) {
   return transaction
 }
 
-export default function useKeyPurchaseFromService(window) {
-  const { lockAddress } = lockRoute(window.location.path)
-  const lock = useLock(lockAddress)
+export default function useKeyPurchaseFromService(window, lock) {
   const { account } = useAccount(window)
   const [error, setError] = useState()
   const [defaults, setDefaults] = useState()
