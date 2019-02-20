@@ -7,7 +7,7 @@ import useAccount from '../../../hooks/web3/useAccountFromService'
 import {
   WalletServiceContext as WalletContext,
   WalletStateContext,
-} from '../../../hooks/components/WalletService'
+} from '../../../hooks/components/WalletServiceProvider'
 import { Web3ServiceContext } from '../../../hooks/components/Web3ServiceProvider'
 import { getWeb3ServiceBalance } from '../../../hooks/asyncActions/accounts'
 import { ConfigContext } from '../../../hooks/utils/useConfig'
