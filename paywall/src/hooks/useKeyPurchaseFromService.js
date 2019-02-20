@@ -130,7 +130,7 @@ export default function useKeyPurchaseFromService(window, lock) {
     wallet.addEventListener('error', listenForWalletEvents)
     wallet.addEventListener('transaction.pending', listenForWalletEvents)
     wallet.addEventListener('transaction.new', listenForWalletEvents)
-    wallet.purchaseKey(lockAddress, account, lock.keyPrice, account)
+    wallet.purchaseKey(lock.address, account, lock.keyPrice, account)
   }
   return { purchaseKey, transaction, error, updateTransaction }
 }
