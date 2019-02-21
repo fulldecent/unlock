@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { FullPage, Banner, Headline, Locks } from './lock/OverlayStyles'
 import useConfig from '../utils/useConfig'
-import useNetwork from '../useNetwork'
+import useNetwork from '../web3/useNetwork'
 import {
   WrongNetwork as WrongNetworkComponent,
   DefaultError,

@@ -6,7 +6,7 @@ import Wallet, {
   useCreateWallet,
   WalletContext,
 } from '../../../hooks/components/Wallet'
-import { MISSING_PROVIDER, NOT_ENABLED_IN_PROVIDER } from '../../../errors'
+import { NOT_ENABLED_IN_PROVIDER } from '../../../errors'
 import { wrapperMaker, expectError } from '../helpers'
 
 jest.mock('web3')
