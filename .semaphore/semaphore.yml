@@ -1,0 +1,61 @@
+version: v1.0
+name: Unlock CI pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: "Build"
+    task:
+      secrets:
+        - name: unlock-docker
+      env_vars:
+        - name: DOCKER_REPOSITORY
+          value: unlockprotocol
+      prologue:
+        commands:
+          - checkout
+      jobs:
+        - name: Build Unlock Image
+          commands:
+            - scripts/build-image.sh unlock
+            - scripts/push-image.sh unlock "$SEMAPHORE_GIT_SHA"
+        - name: Build Unlock Integration Imnage
+          commands:
+            - scripts/build-image.sh unlock-integration
+            - scripts/push-image.sh unlock-integration "$SEMAPHORE_GIT_SHA"
+  - name: "Tests"
+    task:
+      env_vars:
+        - name: DOCKER_REPOSITORY
+          value: unlockprotocol
+      prologue:
+        commands:
+          - scripts/pull-image.sh unlock "$SEMAPHORE_GIT_SHA"
+          - scripts/docker-compose-build.sh
+      jobs:
+        - name: Smart Contracts Unit Tests
+          commands:
+            - scripts/tests.sh smart-contracts
+        - name: Creator Dashboard Unit Tests
+          commands:
+            - scripts/tests.sh unlock-app
+        - name: Locksmith Unit Tests
+          env_vars:
+            - name: DB_USERNAME
+              value: locksmith_test
+            - name: DB_PASSWORD
+              value: password
+            - name: DB_NAME
+              value: locksmith_test
+            - name: DB_HOSTNAME
+              value: db
+          commands:
+            - scripts/tests.sh locksmith
+        - name: Paywall Unit Tests
+          commands:
+            - scripts/tests.sh paywall
+        - name: Integration tests
+          commands:
+            - scripts/pull-image.sh unlock-integration "$SEMAPHORE_GIT_SHA"
+            - scripts/integration-tests.sh
